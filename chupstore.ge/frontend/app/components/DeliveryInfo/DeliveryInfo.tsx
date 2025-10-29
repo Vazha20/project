@@ -65,7 +65,7 @@ const DeliveryInfo: React.FC = () => {
               key={index}
               hoverable
               style={{
-                minWidth: 250, // თითოეული ქარდის ზომა
+                minWidth: 230   , // თითოეული ქარდის ზომა
                 borderRadius: 16,
                 boxShadow: "0 4px 15px rgba(0, 0, 0, 0.08)",
                 flex: "0 0 auto",
