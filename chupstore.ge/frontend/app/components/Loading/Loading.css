@@ -1,0 +1,30 @@
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .load {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 0.25em;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+  
+  @keyframes blink {
+    0%, 100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  

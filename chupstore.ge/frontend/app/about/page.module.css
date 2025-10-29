@@ -1,0 +1,225 @@
+.aboutSection {
+    background: linear-gradient(to bottom right, #ffffff, #f9f9fb);
+    color: #222;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* ------------------ HERO ------------------ */
+  .hero {
+    background-image: url('/bgabout.png');
+    background-size: cover;
+    background-position: center;
+    padding: 160px 20px;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+  
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+  }
+  
+  .heroText {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px; /* მაქსიმუმი გაიზარდა */
+    margin: 0 auto;
+  }
+  
+  .heroText h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  
+  .heroText p {
+    font-size: 18px;
+    color: #eaeaea;
+    line-height: 1.6;
+  }
+  
+  /* ------------------ CONTAINER ------------------ */
+  .container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 80px 30px;
+  }
+  
+  /* ------------------ SECTIONS ------------------ */
+  .section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    margin-bottom: 100px;
+    flex-wrap: wrap;
+  }
+  
+  .reverse {
+    flex-direction: row-reverse;
+  }
+  
+  .textBox {
+    flex: 1 1 45%;
+  }
+  
+  .textBox h2 {
+    font-size: 30px;
+    margin-bottom: 15px;
+    color: #111;
+  }
+  
+  .textBox p {
+    color: #555;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  
+  .imageBox {
+    flex: 1 1 45%;
+    text-align: center;
+  }
+  
+  .image {
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: transform 0.4s ease;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .image:hover {
+    transform: scale(1.03);
+  }
+  
+  /* ------------------ VALUES CARDS ------------------ */
+  .values {
+    text-align: center;
+    margin-bottom: 100px;
+  }
+  
+  .values h2 {
+    font-size: 32px;
+    margin-bottom: 50px;
+    color: #111;
+  }
+  
+  .cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 35px 25px;
+    width: 320px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card h3 {
+    color: #222;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  
+  .card p {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  
+  /* ------------------ CTA ------------------ */
+  .cta {
+    text-align: center;
+    background: linear-gradient(135deg, #222, #444);
+    color: white;
+    padding: 80px 20px;
+    border-radius: 24px;
+    margin-top: 60px;
+  }
+  
+  .cta h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  .cta p {
+    color: #ccc;
+    margin-bottom: 25px;
+  }
+  
+  .button {
+    display: inline-block;
+    background: #f8c400;
+    color: #111;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .button:hover {
+    background: #ffd700;
+    transform: scale(1.05);
+  }
+  
+  /* ------------------ RESPONSIVE ------------------ */
+  @media (max-width: 1024px) {
+    .section {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .textBox, .imageBox {
+      flex: 1 1 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .heroText h1 {
+      font-size: 36px;
+    }
+  
+    .heroText p {
+      font-size: 16px;
+    }
+  
+    .textBox h2 {
+      font-size: 26px;
+    }
+  
+    .textBox p {
+      font-size: 15px;
+    }
+  
+    .values h2 {
+      font-size: 28px;
+    }
+  
+    .card {
+      width: 100%;
+      max-width: 320px;
+    }
+  
+    .cta h2 {
+      font-size: 28px;
+    }
+  
+    .cta p {
+      font-size: 16px;
+    }
+  }

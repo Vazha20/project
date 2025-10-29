@@ -1,0 +1,19 @@
+.wrapper {
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+    min-height: 400px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  
+  .loaded {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* სურათის hover ან დამატებითი სტილი სურვილისამებრ */
+  .wrapper img {
+    transition: transform 0.6s ease;
+  }

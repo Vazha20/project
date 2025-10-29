@@ -1,0 +1,51 @@
+.searchcontainer{
+    max-width: 1320px;
+    width: 100%;
+    position: absolute;
+    top: 54px;
+    left: 0px;
+    padding: 0px 28px;
+  }
+  .searchInput {
+    width: 100%;
+    padding: 20px 50px;
+    background-color: #dedede;
+    border:none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    outline: none;
+    position: relative;
+  }
+  .closeIcon {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    z-index: 1200;
+  }
+  .searchicon{
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #333;
+    z-index: 1200;
+  }
+  .iconBox {
+    width: 26px;              /* ფიქსირებული ზომა — აღარ “დახტება” */
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+  
+  .icon {
+    font-size: 22px;
+    cursor: pointer;
+  }
