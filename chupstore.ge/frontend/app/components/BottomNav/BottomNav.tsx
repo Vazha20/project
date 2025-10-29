@@ -4,7 +4,6 @@ import Link from 'next/link';
 import styles from './BottomNav.module.css';
 import { HomeOutlined, AppstoreOutlined, UserOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { Modal } from 'antd';
 import Login from '../Login/Login'; // შენს Login კომპონენტს ჩასვამ
 
 export default function BottomNav() {
@@ -28,7 +27,7 @@ export default function BottomNav() {
         <button onClick={toggleLogin} className={styles.navItemButton}>
           <UserOutlined style={{ fontSize: '20px' }} />
           <span>შესვლა</span>
-        </button>
+        </button    >
       </nav>
 
       
