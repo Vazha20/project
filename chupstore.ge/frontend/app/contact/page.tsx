@@ -2,9 +2,11 @@
 
 import { MailOutlined, PhoneOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import styles from './page.module.css';
+import FAQSection from '../components/FAQSection/FAQSection';
 
 export default function Contact() {
   return (
+    <>
     <section className={styles.contactSection}>
       <div className={styles.container}>
         <h1 className={styles.title}>დაგვიკავშირდი</h1>
@@ -38,5 +40,7 @@ export default function Contact() {
         </div>
       </div>
     </section>
+    <FAQSection />
+    </>
   );
 }

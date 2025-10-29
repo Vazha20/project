@@ -8,6 +8,7 @@ import Loading from "./components/Loading/Loading";
 import { AuthProvider } from "./components/context/AuthContext";
 import '@ant-design/v5-patch-for-react-19';
 import { CartProvider } from "./components/context/CartContext";
+import BottomNav from "./components/BottomNav/BottomNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export default function RootLayout({
         <Header />
         <Loading />
         {children}
+        <BottomNav />
         <Footer />
         </AuthProvider>
         </CartProvider>

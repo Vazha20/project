@@ -1,12 +1,6 @@
-.contactSection {
-    background: linear-gradient(135deg, #f8f9fa, #ffffff);
-    padding: 40px 0px;
-    min-height: 100vh;
-  }
-  
-  .container {
+.container {
     max-width: 1320px;
-    padding: 0px 30px;
+    padding: 40px 30px 80px 30px;
     margin: 0 auto;
   }
   
