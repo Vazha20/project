@@ -29,14 +29,12 @@ export default function Header() {
           <Link href="/contact">კონტაქტი</Link>
         </div>
 
-        {/* Center logo */}
         <div className={styles.center}>
           <Link href="/">
             <span className={styles.logo}>CHUPSTORE</span>
           </Link>
         </div>
 
-        {/* Desktop right menu */}
         <div className={`${styles.flex} ${styles.right}`}>
           <Search />
           <Cart />
@@ -51,7 +49,6 @@ export default function Header() {
           )}
         </div>
 
-        {/* Mobile header */}
         <div className={styles.mobileHeader}>
           <div className={styles.burger} onClick={toggleMenu}>
             <MenuOutlined style={{ fontSize: '24px' }} />
@@ -69,7 +66,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile menu */}
       <div className={`${styles.mobileMenu} ${menuOpen ? styles.active : ''}`}>
         <div className={styles.flextwo}>
           <Link href="/" onClick={() => setMenuOpen(false)}>
@@ -89,19 +85,8 @@ export default function Header() {
         <Link href="/contact" onClick={() => setMenuOpen(false)}>
           კონტაქტი
         </Link>
-
-        {user ? (
-          <Link href={`/profile/${user.id}`} className={styles.login}>
-            პროფილი
-          </Link>
-        ) : (
-          <button className={styles.login} onClick={toggleLogin}>
-            შესვლა
-          </button>
-        )}
       </div>
 
-      {/* Login modal */}
       {loginOpen && <Login onClose={toggleLogin} />}
 
       <hr />

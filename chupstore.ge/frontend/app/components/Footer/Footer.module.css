@@ -65,5 +65,9 @@
     }
     .bottom {
       font-size: 12px;
+      margin-bottom: 60px ;
     }
+  }
+  .webers{
+    text-decoration: underline;
   }

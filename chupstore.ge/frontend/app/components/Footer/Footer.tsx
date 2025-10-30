@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FacebookFilled, InstagramFilled, TwitterSquareFilled } from '@ant-design/icons';
+import { FacebookFilled, InstagramFilled } from '@ant-design/icons';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -33,9 +33,10 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className={styles.bottom}>
-        &copy; {new Date().getFullYear()} CHUPSTORE. ყველა უფლება დაცულია.
-      </div>
+     <div className={styles.bottom}>
+  &copy; {new Date().getFullYear()} CHUPSTORE. ყველა უფლება დაცულია. Powered by <Link className={styles.webers} href="https://www.facebook.com/profile.php?id=61577946634847" target="_blank" rel="noopener noreferrer">Webers.ge</Link>
+</div>
+
     </footer>
   );
 }
