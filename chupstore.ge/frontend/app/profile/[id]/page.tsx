@@ -127,8 +127,13 @@ export default function ProfilePage() {
 
     fileList.forEach((file) => formData.append("images", file.originFileObj));
 
-    if (mainImageIndex !== null && fileList[mainImageIndex]) {
-      formData.append("mainImageIndex", mainImageIndex.toString());
+    // ავტომატური მთავარი ფოტო, თუ მომხმარებელმა არ აირჩია
+    let mainIndex = mainImageIndex;
+    if (mainIndex === null && fileList.length > 0) {
+      mainIndex = Math.floor(Math.random() * fileList.length);
+    }
+    if (mainIndex !== null && fileList[mainIndex]) {
+      formData.append("mainImageIndex", mainIndex.toString());
     }
 
     setLoading(true);

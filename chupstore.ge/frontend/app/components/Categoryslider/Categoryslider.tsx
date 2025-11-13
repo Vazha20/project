@@ -1,6 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import styles from "./Categoryslider.module.css";
+
+const SingleImage: React.FC = () => {
+  return (
+    <div className={styles.wrapper}>
+      <img src="/aaaa.jpeg" alt="Fashion" className={styles.img} />
+    </div>
+  );
+};
+
+export default SingleImage;
+
+/*import React, { useState, useEffect } from "react";
 import { Carousel } from "antd";
 import styles from "./Categoryslider.module.css";
 
@@ -41,3 +54,4 @@ const CarouselBox: React.FC = () => {
 };
 
 export default CarouselBox;
+*/

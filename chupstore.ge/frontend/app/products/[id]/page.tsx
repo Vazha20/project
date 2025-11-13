@@ -15,7 +15,8 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  images: string[];
+  mainImage?: string;
+  images?: string[];
   category: string;
   sizes: string[];
 }
@@ -30,14 +31,28 @@ export default function ProductDetailsPage() {
   const [selectedSize, setSelectedSize] = useState<string>(" ");
   const [editMode, setEditMode] = useState(false);
   const [editedProduct, setEditedProduct] = useState<Partial<Product>>({});
-
   const { addItemToCart } = useCart(); 
 
   useEffect(() => {
     if (!id) return;
     fetch(`http://localhost:3001/api/products/${id}`)
       .then(res => res.json())
-      .then(data => setProduct({ ...data, price: Number(data.price) || 0, images: data.images?.length ? data.images : [data.image || " "], sizes: data.sizes?.length ? data.sizes : [" "] }))
+      .then(data => {
+        const mainImage = data.mainImage;
+        // კარუსელისთვის: exclude mainImage
+        const filteredImages = data.images?.filter((img: string) => {
+          const imgName = img.split("/").pop();
+          const mainImgName = mainImage?.split("/").pop();
+          return imgName !== mainImgName;
+        }) || [];
+        setProduct({
+          ...data,
+          price: Number(data.price) || 0,
+          mainImage,
+          images: filteredImages,
+          sizes: data.sizes?.length ? data.sizes : [" "]
+        });
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [id]);
@@ -76,6 +91,9 @@ export default function ProductDetailsPage() {
   if (loading) return <div style={{ padding: "40px" }}>იტვირთება...</div>;
   if (!product) return <div style={{ padding: "40px" }}>პროდუქტი ვერ მოიძებნა</div>;
 
+  // ყველა ფოტო (thumbnails-ისთვის) — მთავარი + დანარჩენი
+  const allImages = product.mainImage ? [product.mainImage, ...(product.images || [])] : (product.images || []);
+
   return (
     <div style={{ maxWidth: 1320, padding: "40px 30px", margin: "0 auto" }}>
       <Row gutter={[24, 24]}>
@@ -83,18 +101,36 @@ export default function ProductDetailsPage() {
           <Card>
             <div style={{ position: "relative" }}>
               <Carousel ref={setCarouselRef} dots={false} autoplay={false}>
-                {product.images.map((img, idx) => (
+                {/* მთავარი ფოტო */}
+                {product.mainImage && (
+                  <div className="carousel-slide">
+                    <img src={product.mainImage.startsWith("http") ? product.mainImage : `http://localhost:3001${product.mainImage}`} alt={product.name} className="carousel-img" />
+                  </div>
+                )}
+                {/* დანარჩენი ფოტოები */}
+                {product.images?.map((img, idx) => (
                   <div key={idx} className="carousel-slide">
                     <img src={img.startsWith("http") ? img : `http://localhost:3001${img}`} alt={product.name} className="carousel-img" />
                   </div>
                 ))}
               </Carousel>
+
               <LeftOutlined onClick={() => carouselRef?.prev()} style={{ position: "absolute", top: "50%", left: 0, fontSize: 24, color: "#fff", cursor: "pointer", transform: "translateY(-50%)", padding: 8, backgroundColor: "rgba(0,0,0,0.3)", borderRadius: "50%" }} />
               <RightOutlined onClick={() => carouselRef?.next()} style={{ position: "absolute", top: "50%", right: 0, fontSize: 24, color: "#fff", cursor: "pointer", transform: "translateY(-50%)", padding: 8, backgroundColor: "rgba(0,0,0,0.3)", borderRadius: "50%" }} />
             </div>
+
             <div style={{ display: "flex", justifyContent: "center", marginTop: 16, gap: 10 }}>
-              {product.images.map((img, idx) => (
-                <Image key={idx} src={img.startsWith("http") ? img : `http://localhost:3001${img}`} alt={`thumbnail-${idx}`} width={70} height={70} style={{ cursor: "pointer", objectFit: "cover", border: "2px solid #eee" }} onClick={() => carouselRef?.goTo(idx)} />
+              {/* ყველა ფოტო thumbnails */}
+              {allImages.map((img, idx) => (
+                <Image
+                  key={idx}
+                  src={img.startsWith("http") ? img : `http://localhost:3001${img}`}
+                  alt={`thumbnail-${idx}`}
+                  width={70}
+                  height={70}
+                  style={{ cursor: "pointer", objectFit: "cover", border: "2px solid #eee" }}
+                  onClick={() => carouselRef?.goTo(idx)}
+                />
               ))}
             </div>
           </Card>
@@ -126,26 +162,25 @@ export default function ProductDetailsPage() {
                 </div>
 
                 <Space>
-<Button
-  style={{ backgroundColor: "#000", color: "#fff", border: "none" }}
-  icon={<ShoppingCartOutlined />}
-  size="large"
-  onClick={() => addItemToCart({
-    id: product.id,
-    name: product.name,
-    price: product.price,
-    image: product.images[0],
-    size: selectedSize
-  })}
->
-  კალათაში დამატება
-</Button>
+                  <Button
+                    style={{ backgroundColor: "#000", color: "#fff", border: "none" }}
+                    icon={<ShoppingCartOutlined />}
+                    size="large"
+                    onClick={() => addItemToCart({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.mainImage,
+                      size: selectedSize
+                    })}
+                  >
+                    კალათაში დამატება
+                  </Button>
                   <Button style={{ backgroundColor: "#fff", color: "#000", border: "1px solid black" }} type="default" icon={<CreditCardOutlined />} size="large">ყიდვა</Button>
                 </Space>
 
                 <Tag color="cyan">კატეგორია: {product.category}</Tag>
 
-                {/* მხოლოდ ადმინი ხედავს */}
                 {user?.role === "admin" && (
                   <Space style={{ marginTop: 20 }}>
                     <Button icon={<EditOutlined />} onClick={() => setEditMode(true)} style={{ borderColor: "#000" }} className="updbtn">რედაქტირება</Button>

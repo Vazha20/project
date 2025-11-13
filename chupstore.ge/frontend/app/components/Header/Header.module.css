@@ -38,15 +38,18 @@
     cursor: pointer;
   }
   .login {
-    padding: 8px 16px;
+    display: flex;
+    width: 120px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
     border: 1px solid #333;
     border-radius: 6px;
     background: transparent;
     cursor: pointer;
     font-weight: 500;
+    font-size: 16px;
     transition: all 0.2s ease;
-    
-    
   }
   .login:hover {
     background: black;

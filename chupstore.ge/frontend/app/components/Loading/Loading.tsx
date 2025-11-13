@@ -7,8 +7,19 @@ export default function Loading() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
+    // Scroll ბლოკირება ჩატვირთვისას
+    document.body.style.overflow = "hidden";
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+      // Scroll-ის აღდგენა ჩატვირთვის შემდეგ
+      document.body.style.overflow = "auto";
+    }, 1500);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = "auto";
+    };
   }, []);
 
   if (!loading) return null;

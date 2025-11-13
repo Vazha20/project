@@ -12,7 +12,7 @@ import { AppService } from './app.service';
       host: 'localhost',
       port: 5432,
       username: 'chupstore',
-      password: 'chup2025',
+      password: 'Chup2025',
       database: 'chupstoredb',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,

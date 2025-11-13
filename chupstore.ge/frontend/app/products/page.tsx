@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 
 interface Product {
   id: number;
@@ -10,16 +11,24 @@ interface Product {
   price: number;
   category: string;
   mainImage?: string;
-  images?: string[];
 }
 
 export default function ProductsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("ყველა");
-  const [sortOrder, setSortOrder] = useState<string>("none");
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    searchParams.get("category") || "ყველა"
+  );
+  const [sortOrder, setSortOrder] = useState<string>(
+    searchParams.get("sort") || "none"
+  );
+  const [currentPage, setCurrentPage] = useState<number>(
+    parseInt(searchParams.get("page") || "1", 10)
+  );
   const [windowWidth, setWindowWidth] = useState<number>(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
@@ -38,13 +47,8 @@ export default function ProductsPage() {
                 ? p.mainImage
                 : `http://localhost:3001${p.mainImage}`
               : undefined,
-            images: p.images
-              ? p.images.map((img) =>
-                  img.startsWith("http") ? img : `http://localhost:3001${img}`
-                )
-              : [],
           }))
-          .sort((a, b) => b.id - a.id); // ბოლოს დამატებული products პირველზე
+          .sort((a, b) => b.id - a.id);
 
         setProducts(updatedData);
         setFilteredProducts(updatedData);
@@ -69,9 +73,7 @@ export default function ProductsPage() {
     let tempProducts = [...products];
 
     if (selectedCategory !== "ყველა") {
-      tempProducts = tempProducts.filter(
-        (p) => p.category === selectedCategory
-      );
+      tempProducts = tempProducts.filter((p) => p.category === selectedCategory);
     }
 
     if (sortOrder === "asc") tempProducts.sort((a, b) => a.price - b.price);
@@ -79,14 +81,27 @@ export default function ProductsPage() {
 
     setFilteredProducts(tempProducts);
     setCurrentPage(1);
-  }, [selectedCategory, sortOrder, products]);
+
+    // URL-ის განახლება
+    const params = new URLSearchParams();
+    if (selectedCategory !== "ყველა") params.set("category", selectedCategory);
+    if (sortOrder !== "none") params.set("sort", sortOrder);
+    params.set("page", "1");
+    router.replace(`/products?${params.toString()}`);
+  }, [selectedCategory, sortOrder, products, router]);
+
+  // Pagination update URL
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (selectedCategory !== "ყველა") params.set("category", selectedCategory);
+    if (sortOrder !== "none") params.set("sort", sortOrder);
+    params.set("page", currentPage.toString());
+    router.replace(`/products?${params.toString()}`);
+  }, [currentPage, selectedCategory, sortOrder, router]);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   const renderFilters = () => (
@@ -142,8 +157,8 @@ export default function ProductsPage() {
   };
 
   return (
-    <div style={{ maxWidth: "1320px", padding: "40px 30px", margin: "0 auto" }}>
-      <div style={{ display: "flex", gap: "30px" }}>
+    <div style={{ maxWidth: "1320px", padding: "40px 30px", margin: "0 auto", minHeight: "70vh" }}>
+      <div style={{ display: "flex", gap: "30px", flexWrap: windowWidth <= 1024 ? "wrap" : "nowrap" }}>
         {/* Desktop Sidebar */}
         {windowWidth > 1024 && (
           <div
@@ -207,15 +222,7 @@ export default function ProductsPage() {
               >
                 კატეგორიები
               </h3>
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "8px",
-                }}
-              >
+              <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
                 {categories.map((cat) => (
                   <li key={cat}>
                     <button
@@ -225,12 +232,8 @@ export default function ProductsPage() {
                         textAlign: "left",
                         padding: "8px 12px",
                         borderRadius: "10px",
-                        border:
-                          selectedCategory === cat
-                            ? "2px solid #000000ff"
-                            : "1px solid #eee",
-                        background:
-                          selectedCategory === cat ? "#e6f7ff" : "#f8f9fa",
+                        border: selectedCategory === cat ? "2px solid #000000ff" : "1px solid #eee",
+                        background: selectedCategory === cat ? "#e6f7ff" : "#f8f9fa",
                         cursor: "pointer",
                         fontWeight: "600",
                         color: "#333",
@@ -250,20 +253,11 @@ export default function ProductsPage() {
           {/* Mobile filters */}
           {windowWidth <= 1024 && renderFilters()}
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: getGridColumns(),
-              gap: "20px",
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: getGridColumns(), gap: "20px" }}>
             {currentProducts.map((p) => (
-              <Link
-                key={p.id}
-                href={`/products/${p.id}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
+              <Link key={p.id} href={`/products/${p.id}`} style={{ textDecoration: "none", color: "inherit" }}>
                 <div
+                  className="product-card"
                   style={{
                     border: "1px solid #eee",
                     borderRadius: "12px",
@@ -273,14 +267,13 @@ export default function ProductsPage() {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    height: "350px",
+                    height: "360px",
                   }}
                 >
                   <div>
-                    {/* მთავარი სურათი */}
-                    {(p.mainImage || (p.images && p.images.length > 0)) && (
+                    {p.mainImage && (
                       <img
-                        src={p.mainImage ? p.mainImage : p.images![0]}
+                        src={p.mainImage}
                         alt={p.name}
                         style={{
                           width: "100%",
@@ -292,13 +285,11 @@ export default function ProductsPage() {
                       />
                     )}
                     <h3 style={{ marginBottom: "10px" }}>{p.name}</h3>
-                    <p style={{ marginBottom: "15px", color: "#555" }}>
-                      {p.description.length > 60
-                        ? p.description.slice(0, 60) + "..."
-                        : p.description}
+                    <p style={{ marginBottom: "10px", color: "#555" }}>
+                      {p.description.slice(0, 20) + "..."}
                     </p>
                   </div>
-                  <strong style={{ fontSize: "16px", color: "#000" }}>
+                  <strong style={{ fontSize: "16px", color: "#000", display: "flex", justifyContent: "end" }}>
                     {p.price} ₾
                   </strong>
                 </div>
@@ -316,12 +307,8 @@ export default function ProductsPage() {
                   margin: "0 5px",
                   padding: "8px 12px",
                   borderRadius: "5px",
-                  border:
-                    currentPage === num
-                      ? "2px solid #000000ff"
-                      : "1px solid #ddd",
-                  background:
-                    currentPage === num ? "#ffffffff" : "#fff",
+                  border: currentPage === num ? "2px solid #000000ff" : "1px solid #ddd",
+                  background: currentPage === num ? "#ffffffff" : "#fff",
                   cursor: "pointer",
                   transition: "0.2s",
                 }}
@@ -337,15 +324,6 @@ export default function ProductsPage() {
         .product-card:hover {
           transform: translateY(-5px);
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        @media (max-width: 1024px) {
-          div[style*="display: flex"] {
-            flex-direction: column;
-          }
-          div[style*="min-width: 250px"] {
-            margin-bottom: 20px;
-          }
         }
       `}</style>
     </div>

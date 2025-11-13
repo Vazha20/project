@@ -45,7 +45,7 @@ const services: ServiceItem[] = [
 const DeliveryInfo: React.FC = () => {
   return (
     <div>
-      <div style={{ maxWidth: "1320px", margin: "0 auto", textAlign: "center",padding: "40px 20px" }}>
+      <div style={{ maxWidth: "1320px", margin: "0 auto", textAlign: "center", padding: "20px 20px 40px" }}>
         <Title level={2} style={{ marginBottom: 40 }}>
           🚚 მიწოდება და სერვისები
         </Title>
@@ -65,7 +65,7 @@ const DeliveryInfo: React.FC = () => {
               key={index}
               hoverable
               style={{
-                minWidth: 230   , // თითოეული ქარდის ზომა
+                minWidth: 230, // თითოეული ქარდის ზომა
                 borderRadius: 16,
                 boxShadow: "0 4px 15px rgba(0, 0, 0, 0.08)",
                 flex: "0 0 auto",
@@ -76,12 +76,15 @@ const DeliveryInfo: React.FC = () => {
                 textAlign: "center",
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
               }}
-              bodyStyle={{
-                padding: "20px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
+              // ძველი bodyStyle შეცვალა styles.body-ით
+              styles={{
+                body: {
+                  padding: "20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                },
               }}
             >
               <Space direction="vertical" align="center" size="middle">

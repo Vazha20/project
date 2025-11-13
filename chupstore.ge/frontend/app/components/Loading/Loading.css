@@ -1,30 +1,42 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* მთლიანი ეკრანის დაფარვა */
 .container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: #fff;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 9999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ტექსტი */
+.load {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #000;
+  letter-spacing: 0.25em;
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+/* ციმციმის ეფექტი */
+@keyframes blink {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 920px) {
   .load {
-    font-size: 3rem;
-    font-weight: 900;
-    color: #000;
-    letter-spacing: 0.25em;
-    animation: blink 1.2s ease-in-out infinite;
+    font-size: 2rem;
   }
-  
-  @keyframes blink {
-    0%, 100% {
-      opacity: 0.2;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-  
+}

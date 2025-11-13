@@ -22,9 +22,9 @@ const Login = dynamic(() => import('../components/Login/Login'), { ssr: false })
 
 export default function CheckoutPage() {
   const { cartItems, updateQuantity, removeItemFromCart, clearCart } = useCart();
-  const { user } = useAuth(); // ავტორიზაციის სტატუსი
+  const { user } = useAuth();
   const router = useRouter();
-  const [showLogin, setShowLogin] = useState(false); // login modal-ის კონტროლი
+  const [showLogin, setShowLogin] = useState(false);
 
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -32,7 +32,7 @@ export default function CheckoutPage() {
   if (cartItems.length === 0)
     return (
       <div
-        className={inter.className} // ✅ Inter ფონტი
+        className={inter.className}
         style={{ textAlign: 'center', padding: '200px 20px', height: '70vh' }}
       >
         <h2 style={{ fontSize: 26 }}>🛒 კალათა ცარიელია</h2>
@@ -41,7 +41,7 @@ export default function CheckoutPage() {
           size="large"
           shape="round"
           style={{
-            backgroundColor: '#000000ff',
+            backgroundColor: '#000',
             border: 'none',
             marginTop: 24,
             padding: '0 40px',
@@ -57,24 +57,26 @@ export default function CheckoutPage() {
 
   return (
     <div
-      className={inter.className} // ✅ Inter ფონტი მთელ გვერდზე
+      className={inter.className}
       style={{
         maxWidth: 1320,
         margin: '40px auto',
         padding: '0 30px',
         fontFamily: 'Inter, sans-serif',
+        minHeight: "60vh"
       }}
     >
       {/* სათაური და კალათის გასუფთავების ღილაკი */}
       <div
         style={{
           display: 'flex',
+          flexWrap: 'wrap',
           justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 40,
+          gap: 15,
+          marginBottom: 20,
         }}
       >
-        <Title level={3} style={{ fontWeight: 700, margin: 0 }}>
+        <Title level={4} style={{ fontWeight: 700, margin: 0 }}>
           შენს კალათაში {totalQuantity} ნივთია
         </Title>
 
@@ -85,6 +87,7 @@ export default function CheckoutPage() {
           style={{
             color: '#999',
             fontWeight: 500,
+            alignSelf: 'flex-start',
             transition: '0.2s',
           }}
           onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(159, 13, 0, 1)')}
@@ -99,14 +102,14 @@ export default function CheckoutPage() {
       </div>
 
       {/* Checkout ლეიაუტი */}
-      <Row gutter={[32, 32]}>
+      <Row gutter={[32, 32]} justify="center">
+        {/* კალათის ნივთები */}
         <Col xs={24} md={16}>
           <Card
-          
             style={{
               borderRadius: 18,
               boxShadow: '0 6px 22px rgba(0,0,0,0.06)',
-              padding: '24px 32px',
+              padding: '',
               transition: 'all 0.3s ease',
             }}
           >
@@ -115,14 +118,14 @@ export default function CheckoutPage() {
                 key={`${item.id}-${item.size}`}
                 style={{
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
+                  flexDirection: 'column',
+                  gap: 12,
                   borderBottom: '1px solid #f3f3f3',
-                  paddingBottom: 20,
-                  marginBottom: 20,
+                  paddingBottom: 16,
+                  marginBottom: 16,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
                   <img
                     src={
                       item.image?.startsWith('http')
@@ -138,43 +141,49 @@ export default function CheckoutPage() {
                       boxShadow: '0 3px 10px rgba(0,0,0,0.08)',
                     }}
                   />
-                 <div style={{ display: "flex",flexDirection: "column"}}>
-  <div style={{ fontWeight: 600, fontSize: 16}}>
-    {item.name}
-  </div>
-  <div style={{ fontSize: 14, marginRight: 8, color: "#777" }}>
-    {item.size}
-  </div>
-  <div style={{ fontSize: 14,fontWeight: 600 }}>
-    {item.price.toFixed(2)} ₾
-  </div>
-</div>
+                  <div style={{ flex: 1, minWidth: 120 }}>
+                    <div style={{ fontWeight: 600, fontSize: 16 }}>{item.name}</div>
+                    <div style={{ fontSize: 14, color: '#777', marginTop: 4 }}>{item.size}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, marginTop: 4 }}>
+                      {item.price.toFixed(2)} ₾
+                    </div>
+                  </div>
 
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <Button
-                    shape="circle"
-                    onClick={() => updateQuantity(item.id, item.size!, item.quantity - 1)}
-                    disabled={item.quantity <= 1}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      flexWrap: 'wrap',
+                    }}
                   >
-                    -
-                  </Button>
-                  <Text strong style={{ minWidth: 20, textAlign: 'center' }}>
-                    {item.quantity}
-                  </Text>
-                  <Button
-                    shape="circle"
-                    onClick={() => updateQuantity(item.id, item.size!, item.quantity + 1)}
-                  >
-                    +
-                  </Button>
-                  <Button
-                    type="text"
-                    icon={<DeleteOutlined />}
-                    danger
-                    onClick={() => removeItemFromCart(item.id, item.size)}
-                  />
+                    <Button
+                      shape="circle"
+                      onClick={() =>
+                        updateQuantity(item.id, item.size!, item.quantity - 1)
+                      }
+                      disabled={item.quantity <= 1}
+                    >
+                      -
+                    </Button>
+                    <Text strong style={{ minWidth: 20, textAlign: 'center' }}>
+                      {item.quantity}
+                    </Text>
+                    <Button
+                      shape="circle"
+                      onClick={() =>
+                        updateQuantity(item.id, item.size!, item.quantity + 1)
+                      }
+                    >
+                      +
+                    </Button>
+                    <Button
+                      type="text"
+                      icon={<DeleteOutlined />}
+                      danger
+                      onClick={() => removeItemFromCart(item.id, item.size)}
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -184,11 +193,11 @@ export default function CheckoutPage() {
         {/* შეკვეთის შეჯამება */}
         <Col xs={24} md={8}>
           <Card
-            bordered={false}
+        
             style={{
               borderRadius: 18,
               boxShadow: '0 6px 22px rgba(0,0,0,0.06)',
-              padding: '30px 24px',
+              padding: '',
               transition: 'all 0.3s ease',
             }}
           >
@@ -215,7 +224,7 @@ export default function CheckoutPage() {
               }}
             >
               <span>გადასახდელი თანხა</span>
-              <span style={{ color: '#000000ff' }}>{totalPrice.toFixed(2)} ₾</span>
+              <span style={{ color: '#000' }}>{totalPrice.toFixed(2)} ₾</span>
             </div>
 
             <Button
@@ -223,7 +232,7 @@ export default function CheckoutPage() {
               block
               size="large"
               style={{
-                backgroundColor: '#000000ff',
+                backgroundColor: '#000',
                 border: 'none',
                 height: 52,
                 borderRadius: 12,
@@ -233,7 +242,7 @@ export default function CheckoutPage() {
               }}
               onClick={() => {
                 if (!user) {
-                  setShowLogin(true); // თუ არ არის ავტორიზებული, მოდალი
+                  setShowLogin(true);
                 } else {
                   router.push('/checkout');
                 }
